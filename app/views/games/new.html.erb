@@ -1,0 +1,29 @@
+<h1>New game</h1>
+
+<div class="row mt-4">
+  <% @letters.each do |letter| %>
+  <div class="col-lg-1 col-sm-6">
+    <div class="card">
+      <div class="card-body bg-primary text-white border border-dark rounded shadow-sm">
+        <h5 class="card-title text-center"><%= letter %></h5>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<div class="row mt-4">
+  <div class="col">
+    <p>What is the longest word you can find?</p>
+      <div class="form-group">
+        <form action="/score" method="post" data-turbo="false" class="d-flex justify-content-between align-items-start">
+        <!-- ... -->
+        <input type="text" name="word" class="form-control">
+        <%# We need a hidden input field to hold the values of LETTERS: %>
+        <input type="hidden" name="grid" value="<%= @letters.join("") %>">
+        <input type="submit" value="Play" class="btn btn-light">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        </form>
+      </div>
+  </div>
+</div>

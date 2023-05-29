@@ -1,0 +1,15 @@
+<h1>Result</h1>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert">
+    <%= flash[:notice] %>
+  </div>
+<% elsif flash[:alert] %>
+  <div class="alert alert-danger" role="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<p>Your attempt: <%= flash[:word_attempt] %></p>
+
+<%= link_to "Play again", new_path %>
