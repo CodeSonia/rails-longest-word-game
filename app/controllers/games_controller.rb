@@ -5,37 +5,31 @@ require 'json'
 
 class GamesController < ApplicationController
   def new
-    alpha_range = ('A'..'Z')
-    alphabet_arr = alpha_range.to_a
-
-    @letters = alphabet_arr.sample(10)
+    @letters = ('A'..'Z').to_a.sample(10)
   end
 
   def score
-    word = params[:word]
-    letters = params[:grid].downcase.split('')
-
-    response = URI.open("https://wagon-dictionary.herokuapp.com/#{word}")
-    json = JSON.parse(response.read)
+    word = params[:word].downcase
+    letters = params[:grid].downcase
 
     letters_array = []
-    word.downcase.chars.each do |letter|
+    word.chars.each do |letter|
       letters_array << letter if letters.include?(letter)
     end
 
-    flash[:word_attempt] = word
-
-    if json['found']
-      # raise
-      if letters_array.length == word.length
-        score = word.length
-        flash[:notice] = "Yay! Well done, you're score is #{score}"
-      else
-        flash[:alert] = "Oh no, #{word} uses letters not in the letters provided."
-      end
-    else
-      flash[:alert] = "Sorry, #{word} is not an English word"
+    if letters_array.join != word
+      @message = "The #{word} can't be built out of the original grid"
+    elsif letters_array.join == word && fetch_api(word) == false
+      @message = "The #{word} is not a valid English word"
+    elsif letters_array.join == word && fetch_api(word) == true
+      @message = "Congratulations! #{word} is a valid English word"
     end
   end
-end
 
+  def fetch_api(word)
+    response = URI.open("https://wagon-dictionary.herokuapp.com/#{word}")
+    json_serialized = JSON.parse(response.read)
+
+    json_serialized['found'] == true
+  end
+end

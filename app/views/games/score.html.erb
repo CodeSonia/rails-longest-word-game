@@ -1,15 +1,9 @@
 <h1>Result</h1>
 
-<% if flash[:notice] %>
-  <div class="alert alert-success" role="alert">
-    <%= flash[:notice] %>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="alert alert-danger" role="alert">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
+<div>
+  <p>
+    <%= @message.gsub(/\b#{Regexp.escape(params[:word])}\b/i) { |match| "<strong>#{match.upcase}</strong>" }.html_safe %>
+  </p>
 
-<p>Your attempt: <%= flash[:word_attempt] %></p>
-
-<%= link_to "Play again", new_path %>
+<%= link_to "Play again", new_path, class: "text-decoration-none" %>
+</div>
